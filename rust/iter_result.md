@@ -46,3 +46,53 @@ let v = source
     .collect::<Result<Vec<_>, _>>();
 assert!(v.is_err());
 ```
+イテレータの中で最初に発生したエラーをエラーとして返す。  
+当然エラーが発生した時点で残りの要素は評価しない。
+```rs
+#[derive(PartialEq, Eq, Debug)]
+enum Error {
+    Zero,
+    Minus,
+}
+
+struct X(i32);
+impl X {
+    // 1 以上の値でないとエラー
+    fn value(&self) -> Result<i32, Error> {
+        println!("X::value() = {}", self.0);
+        if self.0 == 0 {
+            Err(Error::Zero)
+        } else if self.0 < 0 {
+            Err(Error::Minus)
+        } else {
+            Ok(self.0)
+        }
+    }
+}
+
+```
+```rs
+let source = vec![X(0), X(-1), X(1)];
+let v = source
+    .iter()
+    .map(|x| x.value())
+    .collect::<Result<Vec<_>, _>>();
+assert_eq!(Err(Error::Zero), v);
+
+println!("--");
+let source = vec![X(-1), X(0), X(1)];
+let v = source
+    .iter()
+    .map(|x| x.value())
+    .collect::<Result<Vec<_>, _>>();
+assert_eq!(Err(Error::Minus), v);
+```
+```rs
+$ cargo test -- --nocapture
+...
+running 1 test
+X::value() = 0
+--
+X::value() = -1
+...
+```
