@@ -6,4 +6,5 @@
 [Iterator で Result が出現する場合の対処](/rust/iter_result.md)
 
 ## Misc
-[SSH](/misc/ssh.md)
+[SSH](/misc/ssh.md)  
+[Redocly を使用して openapi.json から HTML を出力する](/misc/redocly.md)
