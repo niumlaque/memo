@@ -2,6 +2,7 @@
 [https://niumlaque.github.io/memo/](https://niumlaque.github.io/memo)
 
 ## Rust
+[ビルド時に git の Hash 値を埋め込む](/rust/git_hash.md)  
 [Iterator で Result が出現する場合の対処](/rust/iter_result.md)
 
 ## Misc
