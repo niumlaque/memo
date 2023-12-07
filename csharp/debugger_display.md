@@ -61,6 +61,7 @@ class X
  class Program
  {
 ```
+
 ```diff
      }
  }
