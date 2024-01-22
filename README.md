@@ -12,4 +12,5 @@
 
 ## Misc
 [SSH](/misc/ssh.md)  
-[Redocly を使用して openapi.json から HTML を出力する](/misc/redocly.md)
+[Redocly を使用して openapi.json から HTML を出力する](/misc/redocly.md)  
+[チラ裏](/misc/trashcan.md)
