@@ -4,7 +4,7 @@
 `/etc/hosts` を更新することで直るのはわかるのだが、`sudo` とホスト名の関係がわからなかった。
 
 以下の理由らしい。  
-https://superuser.com/questions/429790/sudo-command-trying-to-search-for-hostname
+[https://superuser.com/questions/429790/sudo-command-trying-to-search-for-hostname](https://superuser.com/questions/429790/sudo-command-trying-to-search-for-hostname)
 
 ChatGPT による翻訳。
 > /etc/sudoersファイルは複数のサーバー間で配布できるように設計されています。これを実現するために、ファイル内の各権限にはホスト部分があります。  
