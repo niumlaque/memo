@@ -44,3 +44,29 @@ Dev Containers は上記の不満を解決してくれつつ、
 高スペックマシンに SSH で接続して Dev Containers を使うしかなさそうかな。
 
 git のホスティングサービスとして GitHub を利用する開発であれば、GitHub Coodespaces で出来たりするんだろうか。
+
+# Bind Address の意味
+keen さんが全て説明してくれた。  
+https://keens.github.io/blog/2016/02/24/bind_addressnoimigayouyakuwakatta/
+
+> 実際に使ってみても127.0.0.1を指定すればローカルホストから、0.0.0.0を指定すれば外部からでも参照出来るな、くらいの認識しかありませんでした。
+
+上記記事を閲覧するまで本当にこの通りの認識で、  
+何なら学生の頃は `192.168.12.255` とか指定すれば `192.168.12.*` からの接続のみ受け付けるのかな？などの勘違いをしていた。(実際にやってみて違うことは理解した)
+
+関数名のとおり、本当に `Bind` なんだなぁ。
+
+私自身最初は C# でプログラミングを始めたのだが、ネットワークのプログラムを書くときに最初に触るのは `System.Net.Sockets.TcpListener` だった。  
+MSDN に記述された `TcpListener` のコンストラクタの説明は以下だ。
+
+> ```cs
+> public TcpListener (System.Net.IPAddress localaddr, int port);
+> ```
+> ### パラメーター
+> `localaddr` IPAddress  
+> ローカルIPアドレスを表す IPAddress。
+>
+> `port` Int32  
+> 受信接続の試行を待機するポート。
+
+今読むと「何故ローカルIPアドレスを指定する必要が？」と疑問が湧くのだが、当時はまぁいいやで済ませてしまっていた。どこのサンプルも大抵 `IPAddress.Any` を指定していたしそんなもんだろと思っていた。
