@@ -5,7 +5,8 @@
 [ビルド時に git の Hash 値を埋め込む](/rust/git_hash.md)  
 [Iterator で Result が出現する場合の対処](/rust/iter_result.md)  
 [tracing クレートを使用してログを出力する(+ログに出しておきたいもの)](/rust/log.md)  
-[Windows でシングルバイナリを生成する](/rust/windows_single_binary.md)
+[Windows でシングルバイナリを生成する](/rust/windows_single_binary.md)  
+[tauri で簡単な GUI アプリケーションを作る(途中)](/rust/tauri-v2a.md)
 
 ## C#
 [Visual Studio でデバッグ時にポップアップウィンドウで変数の情報を表示する](/csharp/debugger_display.md)  
