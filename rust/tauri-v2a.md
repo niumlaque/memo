@@ -8,6 +8,8 @@ ffmpeg の使い方とパラメータのサンプルを渡しても敬遠され�
 Windows GUI といえば C# で Windows Forms を使うしか脳が無かったが、もうそのような時代ではないので tauri。  
 tauri を使って映像ファイルから音声を抽出して保存するアプリケーションを作ってみる。  
 
+{% include alerts/note.html content="以下の記事によると、Tauri v2 が出たらしい。<br/>[Electron代替を目指す軽量なフレームワーク「Tauri v2」β版リリース。iOS/Android対応など](https://www.publickey1.jp/blog/24/electrontauri_v2iosandroid.html)<br/><br/>β版でまだ手を出すのは怖いので、本記事では v1 を使うことにする。" %}
+
 ## プロジェクトの雛形作成
 昔は npm からやった記憶があるが、今回は cargo からプロジェクトを作成してみる。
 以下のコマンドでツールをインストールする。
