@@ -146,14 +146,140 @@ $ cargo tauri dev
 ファイルを選択できることが確認できる。  
 ![filedialog](../images/v2amemo/3.open-file-dialog.png)
 
+## FFmpeg ダウンロードページへの誘導
+FFmpeg のバイナリ込みで配布するのは宜しくない感じがするので、ユーザにダウンロードさせたい。  
+そのためのダウンロードページを表示する画面を作成する。  
+メイン画面とは他の別画面。つまりマルチウィンドウを試す。
+
+適当に↓な html を作成し、
+
+```html
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="styles.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Download FFmpeg</title>
+</head>
+
+<body>
+    <div class="container">
+        <p>Please download latest FFmpeg binary</p>
+        <p><a href="https://www.ffmpeg.org/download.html" target="_blank">https://www.ffmpeg.org/download.html</a></p>
+    </div>
+</body>
+
+</html>
+```
+とりあえず複数ウィンドウでるかを確認したいので、前回作成した main 関数に呼び出し処理を作ってやる。
+
+```diff
+  fn main() {
+      let m = make_v2a_menu();
+      tauri::Builder::default()
+          .menu(m.menu)
++         .setup(|app| {
++             let _dd = tauri::WindowBuilder::new(
++                 app,
++                 "ffmpeg_dl",
++                 tauri::WindowUrl::App("ffmpeg_dl.html".into()),
++             )
++             .build()?;
++             Ok(())
++         })
+          .on_menu_event(m.on_menu_event)
+          .run(tauri::generate_context!())
+          .expect("error while running tauri application");
+  }
+```
+
+想定通りウィンドウが複数表示された。  
+が、新しいウィンドウにメニューバーは不要だ。
+![multi-window-but](../images/v2amemo/4.multi-window-but.png)
+
+どうも以下のコードだとアプリケーション全ての画面にメニューが表示されてしまうようだ。  
+特定のウィンドウだけにメニューを設定しないといけない。
+```rs
+    tauri::Builder::default()
+        .menu(m.menu)
+```
+
+というわけで、明示的にウィンドウを生成してそいつにメニューを設定する。  
+```rs
+fn main() {
+    let m = make_v2a_menu();
+    tauri::Builder::default()
+        .setup(|app| {
+            tauri::WindowBuilder::new(
+                app,
+                "main_window",
+                tauri::WindowUrl::App("index.html".into()),
+            )
+            .menu(m.menu)
+            .title("ここでタイトルも指定できる")
+            .build()?;
+            Ok(())
+        })
+        .on_menu_event(m.on_menu_event)
+        .run(tauri::generate_context!())
+        .expect("error while building tauri application");
+}
+```
+確かにメニューは意図した画面で表示されているが、メインウィンドウが 2 枚表示されている。  
+どこから出てきたお前は。
+![main-window-dup](../images/v2amemo/5.main-window-dup.png)
+
+どうやら `tauri.conf.json` の `tauri.windows` に定義されている項目は Static window として表示されるらしい。  
+ので、消す。
+```diff
+      "windows": [
+-       {
+-         "fullscreen": false,
+-         "resizable": true,
+-         "title": "v2a",
+-         "width": 800,
+-         "height": 600
+-       }
+      ],
+```
+これでメインウィンドウが 2 枚表示される問題は解決した。
+
+後は前項で作成したした `make_v2a_menu` にこんな感じで `Tools` メニューと FFmpeg ダウンロード画面開く用のサブメニューの定義を追加し、
+```rs
+let ffmpeg = CustomMenuItem::new("ffmpeg_page", "Download FFmpeg");
+let tools = Submenu::new("Tools", Menu::new().add_item(ffmpeg));
+let menu = Menu::new().add_submenu(file).add_submenu(tools);
+```
+```rs
+"ffmpeg_page" => {
+    let handle = e.window().app_handle();
+    tauri::WindowBuilder::new(
+        &handle,
+        "ffmpeg_dl",
+        tauri::WindowUrl::App("ffmpeg_dl.html".into()),
+    )
+    .title("Download FFmpeg")
+    .resizable(false)
+    .center()
+    .inner_size(300.0, 200.0)
+    .build()
+    .unwrap();
+}
+```
+実行すると Tools > Download FFmpeg で新しいウィンドウが表示される。  
+![dl--ffmpeg](../images/v2amemo/6.dl-ffmpeg.png)
+
 今回はここまでで暇な時に続きをやる。
+
 ## 残件
 
-* ffmpeg ダウンロードページへの誘導
 * ffmpeg へのパス設定画面
 * 出力形式の選択
 * ffmpeg 呼び出し処理
 * 出力に関する他のパラメータ選択
 
 ## 履歴
-2024-02-06 雛形、メニューバーの項を追加 (rustc 1.75.0 (82e1608df 2023-12-21))
+2024-02-06 雛形、メニューバーの項を追加 (rustc 1.75.0 (82e1608df 2023-12-21))  
+2024-02-14 FFmpeg ダウンロードページへの誘導の項を追加
