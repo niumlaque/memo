@@ -12,9 +12,20 @@ tauri を使って映像ファイルから音声を抽出して保存するア�
 
 ## プロジェクトの雛形作成
 昔は npm からやった記憶があるが、今回は cargo からプロジェクトを作成してみる。
-以下のコマンドでツールをインストールする。
+以下のコマンドでツールをインストールする。  
+(詳しくはここを参照: https://tauri.app/v1/guides/getting-started/prerequisites)
 ```sh
 $ cargo install create-tauri-app --locked
+$ cargo install tauri-cli
+$ sudo aptitude install libwebkit2gtk-4.0-dev \
+    build-essential \
+    curl \
+    wget \
+    file \
+    libssl-dev \
+    libgtk-3-dev \
+    libayatana-appindicator3-dev \
+    librsvg2-dev
 ```
 
 アプリ名は Video to Audio、`V2A` でいいだろう(安直)。  
