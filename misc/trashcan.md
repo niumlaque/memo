@@ -70,3 +70,49 @@ MSDN に記述された `TcpListener` のコンストラクタの説明は以下
 > 受信接続の試行を待機するポート。
 
 今読むと「何故ローカルIPアドレスを指定する必要が？」と疑問が湧くのだが、当時はまぁいいやで済ませてしまっていた。どこのサンプルも大抵 `IPAddress.Any` を指定していたしそんなもんだろと思っていた。
+
+# VSCode で日本語入力ができない
+当然ディストロを入れ直すなんてことは滅多に無い。  
+前回入れ直した際に VSCode 上で Input Method を切り替えることができずかなりの時間を浪費してしまった。  
+今回もつい先程まで切り替えることができずうんざりしたので、VSCode 上で日本語入力できるまでの手順を記録しておく。
+
+今回は Debian 12 を使用している。
+```sh
+$ sudo aptitude -y install fcitx5-mozc
+$ sudo im-config -n fcitx5
+$ sudo reboot
+```
+(再起動じゃなくてログオフでいい)
+
+Fcitx Configuration を開き、`Input Method` に `Keyboard Japanese` と `Mozc` を設定する。
+```sh
+$ fcitx5-configtool
+```
+
+fcitx5 の自動起動設定。
+```sh
+$ mkdir -p ~/.config/autostart
+$ cp /usr/share/applications/org.fcitx.Fcitx5.desktop ~/.config/autostart/.
+```
+
+以下の内容のファイルを作成する。
+```sh
+$ cat /etc/environment.d/fcitx5.conf
+GTK_IM_MODULE=fcitx5
+QT_IM_MODULE=fcitx5
+XMODIFIERS=@im=fcitx5
+```
+前回までの環境はここまでの設定で VSCode で日本語が使えたはずだが今回は IM が切り替わらなかった。  
+どうやら Debian インストール時に Language を English でインストールすると Gnome 側が IM をうまく認識できないらしい。
+
+Gnome に IM に fcitx5 を使っているということをわからせてやる。
+
+```sh
+$ gsettings set org.gnome.settings-daemon.plugins.xsettings overrides "{'Gtk/IMModule':<'fcitx5'>}"
+```
+以下のコマンドで設定した値が表示されれば OK。
+```sh
+$ gsettings get org.gnome.settings-daemon.plugins.xsettings overrides
+{'Gtk/IMModule': <'fcitx5'>}
+```
+この状態で再起動したところ、VSCode で日本語入力ができた。
