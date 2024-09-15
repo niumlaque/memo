@@ -116,3 +116,24 @@ $ gsettings get org.gnome.settings-daemon.plugins.xsettings overrides
 {'Gtk/IMModule': <'fcitx5'>}
 ```
 この状態で再起動したところ、VSCode で日本語入力ができた。
+
+# ディレクトリ及びフォルダのサイズを取得
+現在携わっているプロジェクトで、特定のディレクトリの下のファイルを定期的に S3 上にアップロードする必要がある。  
+アップロードするサイズが大きい場合にどのディレクトリ(or ファイル)が問題になっているかを調査したい。  
+(アップロードの対象外にできるかどうかは人間の判断が必要になるので。)
+
+```sh
+# カレントディレクトリ下でサイズが大きいディレクトリ・ファイルの上位 10 件を出力
+$ du -ahd 1 . | sort -rh | head -10
+```
+```
+-a, --all:
+    write counts for all files, not just directories
+
+-h, --human-readable:
+    print sizes in human readable format (e.g., 1K 234M 2G)
+
+-d, --max-depth=N:
+    print  the  total for a directory (or file, with --all) only if it is N or fewer levels below the command line argument;  --max-depth=0 is the same as --summarize
+```
+
