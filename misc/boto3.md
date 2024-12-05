@@ -53,3 +53,40 @@ def peek(
 
     return None
 ```
+
+### メッセージ追加
+```py
+from typing import Any, Dict
+from uuid import uuid4
+import json
+import boto3
+
+def enqueue(queue_url: str, data: Dict[str, Any]):
+    msg: str = json.dumps(data, ensure_awscii=False)
+    if TARGET_IS_FIFO:
+        return client.send_message(
+            QueueUrl=queue_url,
+            MessageBody=msg,
+            MessageDeduplicationId=str(uuid4()),
+            MessageGroupId=str(uuid4()),
+        )
+    else:
+        return client.send_message(
+            QueueUrl=queue_url,
+            MessageBody=msg,
+        )
+```
+
+### メッセージ削除
+自分で SQS からデータを取得して消したい場合など。
+SourceMapping で呼び出されている場合は不要。
+
+```py
+# データを可視性タイムアウト 60 秒で取得する
+# 取得後 60 秒は削除可能
+msg = peek(queue_url, visibility_timeout=60)
+client.delete_message(
+    QueueUrl=queue_url,
+    ReceiptHandle=msg["ReceiptHandle"],
+)
+```
