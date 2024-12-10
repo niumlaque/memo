@@ -90,3 +90,18 @@ client.delete_message(
     ReceiptHandle=msg["ReceiptHandle"],
 )
 ```
+
+### 可視性タイムアウト設定
+これも自分で SQS からデータを取得して削除せずに、可視性タイムアウトだけリセットしたい場合などに使用する。
+Source Mapping で呼び出されている場合は不要。
+
+```py
+# データを可視性タイムアウト 60 秒で取得する
+# 取得後 60 秒は削除可能
+msg = peek(queue_url, visibility_timeout=60)
+client.change_message_visibility(
+    QueueUrl=queue_url,
+    ReceiptHandle=msg["ReceiptHandle"],
+    VisibilityTimeout=0,
+)
+```
