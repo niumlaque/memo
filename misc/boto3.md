@@ -54,6 +54,36 @@ def peek(
     return None
 ```
 
+### メッセージ列挙
+```py
+def enumerate(
+    queue_url: str,
+    visibility_timeout: int = 60,
+    max_number_of_messages: int = 10,
+):
+    ret = []
+    next_token = None
+    while True:
+        resp = client.receive_message(
+            QueueUrl=queue_url,
+            MaxNumberOfMessages=max_number_of_messages,
+            VisibilityTimeout=visibility_timeout,
+            WaitTimeSeconds=1,
+            ReceiveRequestAttemptId=next_token,
+        )
+
+        messages = resp.get("Messages")
+        if message is None:
+            break
+        
+        for message in messages:
+            ret.append(message)
+
+        next_token = messages[-1].get("ReceiptHandle")
+
+    return ret
+```
+
 ### メッセージ追加
 ```py
 from typing import Any, Dict
