@@ -135,3 +135,71 @@ client.change_message_visibility(
     VisibilityTimeout=0,
 )
 ```
+
+## S3
+### Client 作成
+```py
+from typing import Optional
+import os
+import boto3
+
+def create_client(endpoint_url: Optional[str] = None):
+    client = boto3.client("s3", endpoint_url=endpoint_url)
+    return client
+```
+
+### ファイルをアップロード
+```py
+def upload(bucket_name: str, key: str, buffer: bytes):
+    client.put_object(
+        Bucket=bucket_name,
+        Key=key,
+        Body=buffer
+    )
+```
+
+### ファイルをダウンロード
+```py
+from typing import Optional
+
+def download(bucket_name: str, key: str) -> Optional[bytes]:
+    resp = client.get_object(Bucket=bucket_name, Key=key)
+    body=resp.get("Body")
+    if body is None:
+        return None
+    else:
+        return body.read()
+```
+
+### ファイルを削除
+```py
+def delete(bucket_name: str, key: str):
+    client.delete_object(Bucket=bucket_name, Key=key)
+```
+
+### ファイル有無確認
+一覧取得などもこれを流用すればいい。
+```py
+def exists(bucket_name: str, key: str) -> bool:
+    paginator = client.get_paginator("list_objects_v2")
+    iter = paginator.paginate(Bucket=bucket_name, Prefix=key)
+
+    for page in iter:
+        contents = page.get("Contents")
+        for obj in contents:
+            if key == obj["Key"]:
+                return True
+
+    return False
+```
+
+### Bucket 間コピー
+```py
+def copy(src_bucket_name: str, src_key: str, dest_bucket_name: str, dest_key: str):
+    source = {
+        "Bucket": src_bucket_name,
+        "Key": src_key,
+    }
+
+    client.copy(source, dest_bucket_name, dest_key)
+```
