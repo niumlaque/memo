@@ -15,5 +15,6 @@
 [Redocly を使用して openapi.json から HTML を出力する](/misc/redocly.md)  
 [fish での環境変数の設定方法](/misc/fishenv.md)  
 [チラ裏](/misc/trashcan.md)  
-[WSLg の pulseaudio に追加でモジュールをロードさせる](/misc/wslg-pa.md)
+[WSLg の pulseaudio に追加でモジュールをロードさせる](/misc/wslg-pa.md)  
 [boto3 メモ](/misc/boto3.md)
+
