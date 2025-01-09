@@ -203,3 +203,31 @@ def copy(src_bucket_name: str, src_key: str, dest_bucket_name: str, dest_key: st
 
     client.copy(source, dest_bucket_name, dest_key)
 ```
+
+## Lambda
+### Client 作成
+```py
+from typing import Optional
+import os
+import boto3
+
+def create_client(endpoint_url: Optional[str] = None):
+    client = boto3.client("lambda", endpoint_url=endpoint_url)
+    return client
+```
+
+### Lambda 呼び出し
+```py
+from typing import Any, Dict
+import json
+
+def invoke(func_name: str, payload: Dict[str, Any]):
+    body = json.dumps(payload, ensure_ascii=False)
+    resp = client.invoke(
+        FunctionName=func_name,
+        Payload=body,
+        InvokcationType="RequestResponse",
+    )
+
+    return resp.read().decode()
+```
