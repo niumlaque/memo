@@ -10,6 +10,9 @@
 ## C#
 [Visual Studio でデバッグ時にポップアップウィンドウで変数の情報を表示する](/csharp/debugger_display.md)  
 
+## RTX830
+[ファームウェア更新](/rtx830/firmware-update.md)
+
 ## Misc
 [SSH](/misc/ssh.md)  
 [Redocly を使用して openapi.json から HTML を出力する](/misc/redocly.md)  
