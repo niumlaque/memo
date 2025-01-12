@@ -11,6 +11,7 @@
 [Visual Studio でデバッグ時にポップアップウィンドウで変数の情報を表示する](/csharp/debugger_display.md)  
 
 ## RTX830
+[RTX830 を買ったら最初にやっておくこと](/rtx830/rtx830-init.md)  
 [ファームウェア更新](/rtx830/firmware-update.md)
 
 ## Misc
