@@ -12,7 +12,8 @@
 
 ## RTX830
 [RTX830 を買ったら最初にやっておくこと](/rtx830/rtx830-init.md)  
-[ファームウェア更新](/rtx830/firmware-update.md)
+[ファームウェア更新](/rtx830/firmware-update.md)  
+[RTX830 へのコンソール接続](/rtx830/rtx830-console.md)
 
 ## Misc
 [SSH](/misc/ssh.md)  
