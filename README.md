@@ -21,5 +21,5 @@
 [fish での環境変数の設定方法](/misc/fishenv.md)  
 [チラ裏](/misc/trashcan.md)  
 [WSLg の pulseaudio に追加でモジュールをロードさせる](/misc/wslg-pa.md)  
-[boto3 メモ](/misc/boto3.md)
-
+[boto3 メモ](/misc/boto3.md)  
+[Windows11 を購入したら最初にやっておくこと](/misc/windows11-init.md)
