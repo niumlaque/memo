@@ -78,9 +78,24 @@ InprocServer32
 ### タスクバーの動作
 * タスクバーの配置: 左揃え
 
+## 仮想マシン Platform, WSL, Hyper-V の有効化, Windows Sandbox の有効化
+コントロールパネルを開き、  
+`[プログラム]` > `[プログラムと機能]` > `[Windows の機能の有効化または無効化]` を選択する。
 
-## 仮想マシン Platform と Hyper-V の有効化
 
-## Windows Sandbox の有効化
+まとめてチェックいれるとエラーになることがあるので、
+
+* `Virtual Machine Platform` にチェック
+
+OK ボタンを押下して指示に従って再起動する。
+
+再度 `Windows の機能の有効化または無効化` を開き、
+
+* `Hyper-V` にチェック
+* `Windows Sandbox` にチェック
+
+OK ボタンを押下して指示に従って再起動する。
+
+再起動後、再度 Windows Update を実施すること！
 
 ## WSL2 で Debian の準備
