@@ -112,4 +112,61 @@ OK ボタンを押下して指示に従って再起動する。
 
 再起動後、再度 Windows Update を実施すること！
 
-## WSL2 で Debian の準備
+## レジストリのバックアップ
+Windows+R を押下して `ファイル名を指定して実行` を開き、`regedit` と入力する。
+
+レジストリエディタが表示されたら左ペインのツリーのルートである `コンピューター` を右クリックし、`エクスポート` を選択して保存しておく。
+
+## 復元ポイントの作成
+スタートメニューを開き、`[復元ポイントの作成]` を選択し `作成` ボタンを押下する。
+
+
+
+## WSL, Debian の準備
+
+### WSL のインストール
+コマンドプロンプトを開き、以下のコマンドを実行する。
+```
+wsl --install
+```
+勝手に Ubuntu が入り、`Enter new UNIX username: ` と入力を求められるが Ctrl+C を押してキャンセルする。
+
+以下のコマンドを実行してデフォルトで入ってきた Ubuntu を消し飛ばす。
+```
+wsl --unregister Ubuntu
+```
+
+### Debian のインストール
+以下のコマンドで Debian をインストールする。
+```
+wsl --install Debian
+```
+デフォルトだと C ドライブに入ってしまうので、他ドライブに保存されるようにする。
+```
+wsl --shutdown
+wsl --export Debian "D:\v\wsl\debian.tar"
+wsl --unregister Debian
+wsl --import debian "D:\v\wsl\debian" "D:\v\wsl\debian.tar"
+```
+起動すると root でログインしてしまうため、普段遣いのユーザでログインするようにする。
+```
+wsl -d debian -u <インストール時のユーザ名>
+```
+
+`/etc/wsl.conf` に以下の内容を追記する。
+```sh
+$ sudo vi /etc/wsl.conf
+```
+```diff
+  [boot]
+  systemd=true
++
++ [user]
++ default = <インストール時のユーザ名>
+```
+
+WSL  を再起動して反映されていることを確認する。
+```
+wsl --shutdown
+wsl -d debian
+```
