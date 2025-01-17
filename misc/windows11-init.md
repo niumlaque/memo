@@ -170,3 +170,6 @@ WSL  を再起動して反映されていることを確認する。
 wsl --shutdown
 wsl -d debian
 ```
+
+## ブラウザ用 VM 作成
+[Hyper-V を使用して比較的安全にブラウズ](/misc/hyperv-websandbox.md) を参照。
