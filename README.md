@@ -23,4 +23,5 @@
 [WSLg の pulseaudio に追加でモジュールをロードさせる](/misc/wslg-pa.md)  
 [boto3 メモ](/misc/boto3.md)  
 [Windows11 を購入したら最初にやっておくこと](/misc/windows11-init.md)  
-[Hyper-V を使用して比較的安全にブラウズ](/misc/hyperv-websandbox.md)
+[Hyper-V を使用して比較的安全にブラウズ](/misc/hyperv-websandbox.md)  
+[Hyper-V 上で Rust 開発](/misc/hyperv-rust.md)
