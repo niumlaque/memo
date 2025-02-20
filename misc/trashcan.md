@@ -73,6 +73,14 @@ devcontainer.json
 
 ```
 
+## Lambda 用
+TODO: 上に追加して清書
+```
+apt -y install pipx
+pipx install cargo-lambda
+pipx ensurepath
+```
+
 # Bind Address の意味
 keen さんが全て説明してくれた。  
 https://keens.github.io/blog/2016/02/24/bind_addressnoimigayouyakuwakatta/
