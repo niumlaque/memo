@@ -16,34 +16,62 @@ ChatGPT による翻訳。
 > もし権限のホスト部分が全ての権限に対してALL=に設定されている場合、sudoは名前の検索をする必要がないと主張されるかもしれませんが、それはうまく機能しません。sudoはルールを処理する前に実行されている場所を把握するようです。  
 > これは実際にはsudoが現在のマシンでユーザーが何ができるかを確認するためのもので、管理者としては、100台のサーバーがあれば、それぞれのマシンごとに異なる/etc/sudoersファイルを維持する必要があります。sudoersは権限にホスト部分を持っているので、1つのsudoersファイルを維持し、それをすべてのマシンに配布することができ、それでも各マシンでユーザーが何ができるかについて詳細な制御が可能です。
 
-# Dev Containers に感動した
-VSCode に乗り換えてから日が浅い & キャッチアップしていないので全く知らなかった。
-
-今まで特殊な環境で作業したい場合は docker で image を作成後、  
-```sh
-$ docker run -v ./share:/mnt/host --name=$NAME -ti $NAME
+# Dev Containers テンプレ
+## Rust 用
+Dockerfile  
+(refer: https://code.visualstudio.com/remote/advancedcontainers/add-nonroot-user)
 ```
-のようなコマンドでコンテナ起動し、`./share` にコンテナ内で使用したいファイルを配置していた。  
+FROM rust:1.84-bookworm
 
-この方式には
-* ホストの環境を汚さずに済む
-* 間違って開発環境の構成を壊してしまってもすぐ復旧できる
-* ソースコードはホストに保存されるのでコンテナを削除しても成果は消えない
+RUN apt update \
+  && apt -y install libssl-dev pkg-config sudo \
+  && apt clean \
+  && rm -rf /var/lib/apt/lists/*
 
-といったメリットを感じつつも
-* 一々ファイル群を `./share` へ配置しなくてはならない  
-* コード補完などが一切効かない(補完はあまり当てにしていないが、ジャンプがしづらいのが嫌)  
-* ビルドのためにコンテナに一々アタッチしないといけない 
-* 何か権限関連でエラーが出る(昔のことなので覚えていない)  
+ARG USERNAME=vscode
+ARG USER_UID=1000
+ARG USER_GID=$USER_UID
 
-といった不満を常に抱えていた。  
-Dev Containers は上記の不満を解決してくれつつ、
-ウィザードに沿って設定してボタン一つで開発できる状態にしてくれるのには感動した。
+RUN groupadd --gid $USER_GID $USERNAME \
+  && useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME \
+  && echo "$USERNAME ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/$USERNAME \
+  && chmod 0440 /etc/sudoers.d/$USERNAME 
 
-低スペックマシンでコーディングして高スペックマシンでビルドしたい場合は、
-高スペックマシンに SSH で接続して Dev Containers を使うしかなさそうかな。
+RUN rustup component add rustfmt clippy
 
-git のホスティングサービスとして GitHub を利用する開発であれば、GitHub Coodespaces で出来たりするんだろうか。
+ENTRYPOINT ["/bin/bash"]
+```
+compose.yml
+```yaml
+services:
+  rust_dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    tty: true
+    volumes:
+      - ../:/workspace
+    working_dir: /workspace
+```
+devcontainer.json
+```
+{
+  "dockerComposeFile": ["compose.yml"],
+  "service": "rust_dev",
+  "workspaceFolder": "/workspace",
+  "remoteUser": "vscode",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "rust-lang.rust-analyzer",
+        "vadimcn.vscode-lldb"
+      ]
+    }
+  }
+}
+
+```
 
 # Bind Address の意味
 keen さんが全て説明してくれた。  
