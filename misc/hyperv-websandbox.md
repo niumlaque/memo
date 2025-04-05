@@ -53,6 +53,13 @@ WebSandbox
 ゲストサービスにチェックを入れる  
 (ホストと VM 間のファイルコピー用)
 
+## Nested Hyper-V
+内で更に仮想化が必要な場合、起動する前に PowerShell で以下のコマンドを実行する。  
+(起動中の場合は終了すること)
+```ps
+> Set-VMProcessor -VMName <VMName> -ExposeVirtualizationExtensions $true
+```
+
 ## 起動
 あとは接続なり起動なり。
 
