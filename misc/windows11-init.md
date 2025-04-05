@@ -139,7 +139,7 @@ wsl --unregister Ubuntu
 ### Debian のインストール
 以下のコマンドで Debian をインストールする。
 ```
-wsl --install Debian
+wsl --install -d Debian
 ```
 デフォルトだと C ドライブに入ってしまうので、他ドライブに保存されるようにする。
 ```
