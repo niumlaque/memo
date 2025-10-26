@@ -9,6 +9,7 @@ description: 個人の備忘録
 language: ja
 url: "https://niumlaque.github.io"
 baseurl: "/memo"
+site-css: assets/css/custom-styles.css
 
 navbar-links:
   Home: "/"
