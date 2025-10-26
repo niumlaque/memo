@@ -1,4 +1,7 @@
-# Windows でシングルバイナリを生成する
+---
+title: Windows でシングルバイナリを生成する
+permalink: /rust/windows_single_binary/
+---
 
 「Linux なんてよくわからん」「Windows しか使いたくない」「設定とか何もわからん」というお客様向け。
 

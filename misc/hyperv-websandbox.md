@@ -1,4 +1,7 @@
-# Hyper-V を使用して比較的安全にブラウズ
+---
+title: Hyper-V を使用して比較的安全にブラウズ
+permalink: /misc/hyperv-websandbox/
+---
 
 数年に一度、調べ物に没頭してしまいうっかり怪しい URL にアクセスしてしまうことへの対策。  
 Windows Sandbox を使えばいいのだが、毎回ブラウザや IME のインストール & 設定がめんどくさい。

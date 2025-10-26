@@ -1,4 +1,7 @@
-# Windows 11 を購入して最初にやっておくこと
+---
+title: Windows 11 を購入して最初にやっておくこと
+permalink: /misc/windows11-init/
+---
 
 まずは下書き。  
 実施しながら埋めていく。

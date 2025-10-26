@@ -1,4 +1,8 @@
-# RTX830 へのコンソール接続
+---
+title: RTX830 へのコンソール接続
+permalink: /rtx830/rtx830-console/
+---
+
 接続には minicom を使用する。
 
 ```sh

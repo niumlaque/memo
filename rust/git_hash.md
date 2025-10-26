@@ -1,4 +1,7 @@
-# ビルド時に git の Hash 値を埋め込む
+---
+title: ビルド時に git の Hash 値を埋め込む
+permalink: /rust/git_hash/
+---
 
 不具合発生時に、動作している実行媒体のバージョンを特定したい。  
 `build.rs` に以下のコードを記述する。`build.rs` については [The Cargo Book](https://doc.rust-lang.org/cargo/reference/build-scripts.html) を参照。

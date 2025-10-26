@@ -1,3 +1,8 @@
+---
+title: チラ裏メモ
+permalink: /misc/trashcan/
+---
+
 # sudo がなぜホスト名を参照するのか？
 
 `hostnamectl` でホスト名前を変えたら `sudo` にかなりの時間がかかるようになってしまった。  
@@ -172,4 +177,3 @@ $ du -ahd 1 . | sort -rh | head -10
 -d, --max-depth=N:
     print  the  total for a directory (or file, with --all) only if it is N or fewer levels below the command line argument;  --max-depth=0 is the same as --summarize
 ```
-

@@ -1,4 +1,8 @@
-# SSH 関連
+---
+title: SSH 関連
+permalink: /misc/ssh/
+---
+
 ## SSH Key 生成
 
 以下のコマンドで生成する。  
