@@ -1,6 +1,30 @@
-remote_theme: pages-themes/cayman@v0.2.0
-plugins:
-- jekyll-remote-theme
-title: 備忘録
-description: 2 回以上調べたことを書き残す(かもしれない)
+remote_theme: daattali/beautiful-jekyll
 
+plugins:
+  - jekyll-remote-theme
+
+title: 個人の備忘録
+author: "niumlaque"
+description: 個人の備忘録
+language: ja
+url: "https://niumlaque.github.io"
+baseurl: "/memo"
+site-css: assets/css/custom-styles.css
+
+navbar-links:
+  Home: "/"
+  Rust: "rust/"
+  "C#": "csharp/"
+  RTX830: "rtx830/"
+  Misc: "misc/"
+
+social-network-links:
+  github: "niumlaque"
+
+# カテゴリごとの既定レイアウト設定
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: page

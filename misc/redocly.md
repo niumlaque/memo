@@ -1,4 +1,7 @@
-# Redocly を使用して openapi.json から HTML を出力する
+---
+title: Redocly を使用して openapi.json から HTML を出力する
+permalink: /misc/redocly/
+---
 
 Rust で API サーバを書いているとき、[utoipa](https://crates.io/crates/utoipa) や [utoipa-swagger-ui](https://crates.io/crates/utoipa-swagger-ui) を用いてこれをドキュメント代わりにしていたりする。  
 コメントとちょっとのマクロを書くだけで[ここまで](https://petstore.swagger.io/)出せるのだから大したものだ。

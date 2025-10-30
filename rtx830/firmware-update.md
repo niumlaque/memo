@@ -1,4 +1,7 @@
-# RTX830 のファームウェア更新
+---
+title: RTX830 のファームウェア更新
+permalink: /rtx830/firmware-update/
+---
 
 ## 最新のファームウェアを DL
 以下のページから RTX830 用のファームウェアと MD5 チェックサムを DL する。

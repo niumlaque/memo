@@ -1,4 +1,7 @@
-# Iterator で `Result` が出現する場合の対処
+---
+title: Iterator で `Result` が出現する場合の対処
+permalink: /rust/iter_result/
+---
 よく忘れて調べるか `for loop` で逃げてしまっているのでメモ  
 `Result` を `Option` に置き換えてもよし
 

@@ -1,0 +1,9 @@
+.page-heading > h1 {
+  font-size: 2rem !important;
+  word-break: keep-all;
+}
+
+.page-subheading {
+  font-size: 1.5rem !important;
+}
+

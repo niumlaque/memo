@@ -1,4 +1,7 @@
-# Windows 11 を購入して最初にやっておくこと
+---
+title: Windows 11 を購入して最初にやっておくこと
+permalink: /misc/windows11-init/
+---
 
 2025-10-28 に ThinkPad を購入したので一部更新。
 

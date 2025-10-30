@@ -1,4 +1,7 @@
-# tauri を簡単な GUI アプリケーションを作る(途中)
+---
+title: tauri を簡単な GUI アプリケーションを作る(途中)
+permalink: /rust/tauri-v2a/
+---
 
 映像ファイルから音声を抽出して保存したい。  
 ffmpeg を使えばいいのだが、非エンジニアの Windows ユーザは CLI を知らない(主語がでかい)。

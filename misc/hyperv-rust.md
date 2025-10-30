@@ -1,4 +1,7 @@
-# Hyper-V 上で Rust 開発
+---
+title: Hyper-V 上で Rust 開発
+permalink: /misc/hyperv-rust/
+---
 
 レジストリを触るアプリを開発したいので、壊してもいい VM 上に環境を用意する。
 

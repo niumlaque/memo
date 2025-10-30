@@ -1,4 +1,7 @@
-# WSLg の pulseaudio に追加でモジュールをロードさせる
+---
+title: WSLg の pulseaudio に追加でモジュールをロードさせる
+permalink: /misc/wslg-pa/
+---
 
 最近の WSL は特に意識しなくても GUI は Windows で表示され、音声も再生される。  
 裏では pulseaudio が動いており、多分 `/mnt/wslg/PulseServer` が unix ソケットファイル。

@@ -1,4 +1,8 @@
-# UFW
+---
+title: UFW
+permalink: /misc/ufw/
+---
+
 Uncomplicated Firewall の略で debian 系列で利用される、NetFilter を管理するための iptables のフロントエンドである。
 
 ## UFW を有効にする
@@ -29,5 +33,3 @@ Default: deny (incoming), deny (outgoing), disabled (routed)
 New profiles: skip
 ```
 外から入ってくることができなくなる。  
-
-
