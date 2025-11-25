@@ -5,6 +5,11 @@ permalink: /rust/log/
 
 細かい使い方はともかく、単純な使い方と初期設定。
 
+最新のバージョンについては crates.io を参照すること。
+
+- [https://crates.io/crates/tracing](https://crates.io/crates/tracing)
+- [https://crates.io/crates/tracing-subscriber](https://crates.io/crates/tracing-subscriber)
+
 ## 標準出力に出すだけ
 ```toml
 [dependencies]
