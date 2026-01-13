@@ -104,3 +104,11 @@ $ ip -4 a show dev eth0 | grep inet | awk '{print $2}'
 [Windows Defender ファイアウォール] > [受信の規則] > [新しい規則...] > [ポート] > [TCP, 特定のローカルポート: 40932] > [接続を許可する] > [プライベート(※)]
 
 ※必要に応じて変更
+
+### sshfs
+いつも履歴から実行しているので、新しいマシンを用意したときに毎回調べている。
+
+```sh
+$ sshfs -p 40932 -o IdentityFile=~/.ssh/<鍵> <USER>@<HOST>: /mnt/<DIRECTORY>
+```
+
