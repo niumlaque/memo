@@ -12,3 +12,4 @@ permalink: /misc/
 - [Hyper-V を使用して比較的安全にブラウズ]({{ site.baseurl }}/misc/hyperv-websandbox/)
 - [Hyper-V 上で Rust 開発]({{ site.baseurl }}/misc/hyperv-rust/)
 - [UFW]({{ site.baseurl }}/misc/ufw/)
+- [codex 用の WSL の用意(NOT 汎用)]({{ site.baseurl }}/misc/llmwsl/)
