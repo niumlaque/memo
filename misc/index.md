@@ -13,3 +13,5 @@ permalink: /misc/
 - [Hyper-V 上で Rust 開発]({{ site.baseurl }}/misc/hyperv-rust/)
 - [UFW]({{ site.baseurl }}/misc/ufw/)
 - [codex 用の WSL の用意(NOT 汎用)]({{ site.baseurl }}/misc/llmwsl/)
+- [Stable Diffusion を WSL2 で用意する]({{ site.baseurl }}/misc/install-sd/)
+

@@ -16,6 +16,8 @@ subtitle: 2 回以上調べたことを書き残す(かもしれない)
   - [Hyper-V を使用して比較的安全にブラウズ]({{ site.baseurl }}/misc/hyperv-websandbox/)
   - [Hyper-V 上で Rust 開発]({{ site.baseurl }}/misc/hyperv-rust/)
   - [UFW]({{ site.baseurl }}/misc/ufw/)
+  - [codex 用の WSL の用意(NOT 汎用)]({{ site.baseurl }}/misc/llmwsl/)
+  - [Stable Diffusion を WSL2 で用意する]({{ site.baseurl }}/misc/install-sd/)
 - Rust
   - [ビルド時に git の Hash 値を埋め込む]({{ site.baseurl }}/rust/git_hash/)
   - [Iterator で `Result` が出現する場合の対処]({{ site.baseurl }}/rust/iter_result/)
