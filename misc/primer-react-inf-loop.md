@@ -555,7 +555,73 @@ WebView2 RenderProcessUnresponsive
 
 少なくとも「WebView2 で GitHub を開くと何故か固まる」という状態ではなくなった。
 
-次は原因調査ではなく、アプリ側でこの条件を踏まないようにする。
 
-※ Firefox や Chrome でも、サイドバーを表示した状態で Window を限界まで細くし、ログイン済みの GitHub Home を開くとハングすることが発覚。
+## 結論
+
+最終的に WebView2 固有の問題ではなかった。
+
+Firefox でもサイドバーを表示した状態で Window を限界まで細くすると、同様に GitHub が固まることを確認した。
+
+直接の原因は、狭い viewport で GitHub の GlobalNav 内にある Primer React の Breadcrumbs が縮みすぎること。
+
+今回の環境では以下の流れだった。
+
+```text
+GitHub child WebView
+    ↓
+GitHub GlobalNav が狭くなる
+    ↓
+Breadcrumbs の availableWidth が 28px
+    ↓
+overflow menu button は 32px
+    ↓
+Primer React calculateOverflow() が無限 loop
+    ↓
+Renderer Process が応答しなくなる
+```
+
+アプリ側では GitHub pane に minimum width を設定することで回避できた。
+
+最初はしきい値を詰めて、
+
+```text
+281px -> ハング
+282px -> 正常
+```
+
+という境界まで確認した。
+
+ただし OS の表示倍率を 125% から 100% に変更すると 282px でも再びハングした。
+
+282px をそのまま minimum width にするのはやめる。
+
+最終的に、
+
+```rust
+rect.width = rect.width.max(400.0);
+```
+
+として GitHub pane の minimum width を 400px にした。
+
+表示倍率 100% / 125% の両方で問題なく動作することを確認。
+
+自分の用途では GitHub pane が 400px あれば十分なので、とりあえずこれで回避する。
+
+WebView 作成時の
+
+```rust
+LogicalSize::new(1.0, 1.0)
+```
+
+はそのままで問題なかった。
+
+初期サイズではなく、実際に GitHub が layout される時点で pane が狭くなりすぎないようにすれば良い。
+
+結局、
+
+**GitHub を狭い領域で表示すると Primer React の Breadcrumbs が edge case を踏んで無限 loop する**
+
+という frontend bug だった。
+
+アプリ側では GitHub pane の最小幅を十分に取ることで回避する。
 
