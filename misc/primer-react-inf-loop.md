@@ -265,3 +265,297 @@ WebView2 RenderProcessUnresponsive
 
 ところまでは追えた。
 
+## WebView と GitHub 側の幅を確認する
+
+前述のとおり `availableWidth = 28` になることはわかった。
+
+ただし、WebView2 が GitHub に変な viewport 幅を渡しているのか、GitHub 内の layout で Breadcrumbs だけが狭くなっているのかはまだわからない。
+
+Breadcrumbs から `html` まで祖先を辿り、それぞれの幅を取得する。
+
+ついでに以下も取得した。
+
+- `window.innerWidth`
+- `window.outerWidth`
+- `visualViewport.width`
+- `documentElement.clientWidth`
+- `body.clientWidth`
+- `devicePixelRatio`
+- アプリ側で指定している GitHub child WebView の物理幅
+
+再現時に取得した値が以下。
+
+```text
+GitHub child WebView physical width = 328
+devicePixelRatio = 1.25
+
+window.innerWidth = 263
+window.outerWidth = 263
+visualViewport.width = 248
+
+html = 248
+body = 248
+GlobalNav = 248
+center = 52
+Breadcrumbs = 52
+```
+
+アプリ側で指定している WebView の幅は 328px。
+
+`devicePixelRatio = 1.25` なので CSS pixel にすると、
+
+```text
+328 / 1.25 = 262.4
+```
+
+`window.innerWidth = 263` とほぼ同じ。
+
+WebView2 が意味不明な viewport 幅を GitHub に渡しているわけではなさそう。
+
+以前の調査では `window.innerWidth = 508` という値も取得していたが、少なくとも今回問題が再現している状態では約 263 CSS px。
+
+普通に狭い。
+
+## GlobalNav の幅を確認する
+
+GitHub の GlobalNav は 248px。
+
+中身は以下だった。
+
+```text
+left   = 100px
+center = 52px
+right  = 96px
+```
+
+当然、
+
+```text
+100 + 52 + 96 = 248
+```
+
+となる。
+
+center の style は以下。
+
+```text
+flex: 1 1 0%
+min-width: 0px
+```
+
+left と right で 196px 使用し、残った 52px が center に割り当てられている。
+
+つまり、
+
+```text
+WebView viewport 約263px
+    ↓
+GitHub GlobalNav 約248px
+    ↓
+left 100px + right 96px
+    ↓
+center 52px
+```
+
+ここまでは単純に GitHub の flex layout の結果。
+
+WebView2 が突然 center を 52px にしているとかではない。
+
+## Breadcrumbs の 28px は padding ではない
+
+気になるのは、
+
+```text
+center = 52px
+availableWidth = 28px
+```
+
+の差。
+
+24px なので最初は Breadcrumbs の左右 padding かと思った。
+
+box model を取得してみる。
+
+```text
+box-sizing = border-box
+padding-left = 0px
+padding-right = 0px
+clientWidth = 52
+offsetWidth = 52
+getBoundingClientRect().width = 52
+```
+
+padding ではない。
+
+この時点では Breadcrumbs 自体も 52px ある。
+
+にも関わらず、その後 Primer React の `availableWidth` は 28 になる。
+
+じゃあ 28px はどこから出てきたのか。
+
+## ResizeObserver の値を確認する
+
+Primer React の Breadcrumbs は `ResizeObserver` で幅を監視し、その値を `availableWidth` として overflow の計算に使用している。
+
+`window.ResizeObserver` を document 開始時に wrap し、GitHub が登録した callback はそのまま実行しつつ、Breadcrumbs の entry だけ callback の直前にログへ出すようにした。
+
+結果が以下。
+
+```text
+contentRect.width = 28
+getBoundingClientRect().width = 28
+clientWidth = 28
+offsetWidth = 28
+```
+
+全部 28px。
+
+`ResizeObserver` だけ変な値を返しているわけではなさそう。
+
+callback が実行された時点では Breadcrumbs 自体が本当に 28px になっている。
+
+つまり、
+
+```text
+Breadcrumbs = 52px
+    ↓
+何らかの layout 更新
+    ↓
+Breadcrumbs = 28px
+    ↓
+ResizeObserver
+    ↓
+availableWidth = 28
+    ↓
+calculateOverflow()
+    ↓
+menuButtonWidth = 32
+    ↓
+無限 loop
+```
+
+となっている。
+
+## 何故 52px から 28px になるのか
+
+ここはまだ完全にはわかっていない。
+
+今のところ Breadcrumbs 自身の overflow 処理が影響しているように見える。
+
+最初は center に 52px ある。
+
+Primer はこの幅に Breadcrumbs を収めるため、表示する Breadcrumb を減らして overflow menu に移動する。
+
+その後 Breadcrumbs 自体が 28px になり、`ResizeObserver` がその値を通知する。
+
+再度 `calculateOverflow()` が実行されるが、
+
+```text
+availableWidth = 28
+menuButtonWidth = 32
+```
+
+なので、前述の無限 loop に入る。
+
+今のところ以下のような流れに見える。
+
+```text
+狭い WebView
+    ↓
+GitHub GlobalNav 約248px
+    ↓
+left / right に幅を取られる
+    ↓
+center 52px
+    ↓
+Primer が overflow の layout を変更
+    ↓
+Breadcrumbs 28px
+    ↓
+ResizeObserver が 28px を通知
+    ↓
+Primer calculateOverflow()
+    ↓
+32px の menu button すら入らない
+    ↓
+u が空になっても slice し続ける
+    ↓
+無限 loop
+```
+
+52px から 28px になる直接の理由についてはもう少し調べる必要がある。
+
+## WebView2 固有の問題なのか
+
+ここまで調べた限り、WebView2 の Renderer 自体がおかしくなっているようには見えない。
+
+少なくとも、
+
+- viewport の CSS pixel と `devicePixelRatio` は整合する
+- DOM の幅も flex layout と整合する
+- `ResizeObserver` の値も実際の DOM 幅と一致する
+- Renderer が止まる場所は毎回 Primer React の同じ loop
+
+となっている。
+
+なので Renderer が止まる直接の原因はやはり Primer React 側。
+
+ただ、Firefox や Chrome で普通に GitHub を開いている分には発生していない。
+
+このアプリでは GitHub をかなり狭い child WebView に表示しているので、
+
+```text
+availableWidth < menuButtonWidth
+```
+
+という普通のブラウザではあまり踏まなさそうな条件になっている。
+
+WebView2 だから壊れるというより、このアプリの狭い viewport で Primer React の edge case を踏んでいると考えるのが自然そう。
+
+## 現在地
+
+ここまでの調査結果をまとめると以下。
+
+```text
+GitHub child WebView
+physical width = 328px
+devicePixelRatio = 1.25
+    ↓
+CSS viewport ≒ 263px
+    ↓
+GitHub GlobalNav ≒ 248px
+    ↓
+left 100px
+right 96px
+center 52px
+    ↓
+Primer Breadcrumbs の overflow 処理
+    ↓
+Breadcrumbs 28px
+    ↓
+ResizeObserver contentRect.width = 28
+    ↓
+Primer availableWidth = 28
+menuButtonWidth = 32
+    ↓
+calculateOverflow() が空配列から抜けられない
+    ↓
+無限 loop
+    ↓
+WebView2 RenderProcessUnresponsive
+```
+
+最初に疑っていた GPU、WebView2 Runtime、WebView 作成時の初期サイズはほぼ関係なさそう。
+
+結局、
+
+**狭い layout で Primer React の無限 loop を踏んでいる**
+
+というところまで絞れた。
+
+少なくとも「WebView2 で GitHub を開くと何故か固まる」という状態ではなくなった。
+
+次は原因調査ではなく、アプリ側でこの条件を踏まないようにする。
+
+※ Firefox や Chrome でも、サイドバーを表示した状態で Window を限界まで細くし、ログイン済みの GitHub Home を開くとハングすることが発覚。
+
