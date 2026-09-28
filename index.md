@@ -18,6 +18,7 @@ subtitle: 2 回以上調べたことを書き残す(かもしれない)
   - [UFW]({{ site.baseurl }}/misc/ufw/)
   - [codex 用の WSL の用意(NOT 汎用)]({{ site.baseurl }}/misc/llmwsl/)
   - [Stable Diffusion を WSL2 で用意する]({{ site.baseurl }}/misc/install-sd/)
+  - [Primer React の無限ループ]({{ site.baseurl }}/misc/primer-react-inf-loop/)
 - Rust
   - [ビルド時に git の Hash 値を埋め込む]({{ site.baseurl }}/rust/git_hash/)
   - [Iterator で `Result` が出現する場合の対処]({{ site.baseurl }}/rust/iter_result/)

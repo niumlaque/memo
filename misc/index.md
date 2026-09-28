@@ -14,4 +14,5 @@ permalink: /misc/
 - [UFW]({{ site.baseurl }}/misc/ufw/)
 - [codex 用の WSL の用意(NOT 汎用)]({{ site.baseurl }}/misc/llmwsl/)
 - [Stable Diffusion を WSL2 で用意する]({{ site.baseurl }}/misc/install-sd/)
+- [Primer React の無限ループ]({{ site.baseurl }}/misc/primer-react-inf-loop/)
 
